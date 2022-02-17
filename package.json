@@ -1,0 +1,32 @@
+{
+  "name": "@demarche1/create-project",
+  "version": "1.0.0",
+  "description": "A CLI to bootstrap my new node projects",
+  "main": "src/index.js",
+  "bin": {
+    "@demarche1/create-node-projects": "bin/create-project",
+    "create-project": "bin/create-project"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cli",
+    "create-project"
+  ],
+  "author": "Alessandro Demarche da Silva",
+  "license": "MIT",
+  "dependencies": {
+    "arg": "^5.0.1",
+    "cli-color": "^2.0.1",
+    "esm": "^3.2.25",
+    "execa": "^0.6.0",
+    "inquirer": "^8.2.0",
+    "listr": "^0.14.3",
+    "ncp": "^2.0.0",
+    "pkg-install": "^1.0.0"
+  }
+}
