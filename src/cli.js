@@ -3,7 +3,6 @@ import inquirer from "inquirer";
 import { createProject } from "./main";
 
 function parseArgumentsIntoOptions(rawArgs) {
-  console.log("rawArgs >>", rawArgs);
   const args = arg(
     {
       "--git": Boolean,
