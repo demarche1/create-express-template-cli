@@ -16,9 +16,12 @@ async function copyTemplateFiles(options) {
   });
 }
 
-async function initializeGit() {
+async function initializeGit(options) {
   try {
-    await execa("git", ["init"]);
+    console.log(`${options.targetDirectory}/express-project-init`);
+    await execa("git", ["init"], {
+      cwd: `${options.targetDirectory}/express-project-init`,
+    });
   } catch (error) {
     console.error("%s failed to initialize git", clc.bgRed(clc.black("ERROR")));
     process.exit(1);
@@ -53,11 +56,15 @@ export async function createProject(options) {
     },
     {
       title: "Initialize git",
-      task: () => initializeGit(),
+      task: () => initializeGit(options),
+      skip: () => !options.git,
     },
     {
       title: "Install dependencies",
-      task: () => projectInstall({ cwd: options.targetDirectory }),
+      task: () =>
+        projectInstall({
+          cwd: `${options.targetDirectory}/express-project-init`,
+        }),
       skip: () => !options.runInstall,
     },
   ]);
