@@ -11,19 +11,44 @@ const access = promisify(fs.access);
 const copy = promisify(ncp);
 
 async function copyTemplateFiles(options) {
-  return copy(options.templateDirectory, options.targetDirectory, {
-    clobber: false,
-  });
+  return copy(
+    options.templateDirectory,
+    `${options.targetDirectory}/${options.projectName}`,
+    {
+      clobber: false,
+    }
+  );
 }
 
 async function initializeGit(options) {
   try {
-    console.log(`${options.targetDirectory}/express-project-init`);
     await execa("git", ["init"], {
-      cwd: `${options.targetDirectory}/express-project-init`,
+      cwd: `${options.targetDirectory}/${options.projectName}`,
     });
   } catch (error) {
     console.error("%s failed to initialize git", clc.bgRed(clc.black("ERROR")));
+    process.exit(1);
+  }
+}
+
+async function createProjectDirectory(options) {
+  try {
+    if (!options.projectName || !options.projectName.length) {
+      console.error(
+        "%s project name is required",
+        clc.bgRed(clc.black("ERROR"))
+      );
+      process.exit(1);
+    }
+
+    await execa("mkdir", [options.projectName], {
+      cwd: options.targetDirectory,
+    });
+  } catch (error) {
+    console.error(
+      "%s failed to create project directory",
+      clc.bgRed(clc.black("ERROR"))
+    );
     process.exit(1);
   }
 }
@@ -51,6 +76,11 @@ export async function createProject(options) {
 
   const tasks = new Listr([
     {
+      title: "Create project directory",
+      task: () => createProjectDirectory(options),
+      skip: () => false,
+    },
+    {
       title: "Copy project files",
       task: () => copyTemplateFiles(options),
     },
@@ -63,7 +93,7 @@ export async function createProject(options) {
       title: "Install dependencies",
       task: () =>
         projectInstall({
-          cwd: `${options.targetDirectory}/express-project-init`,
+          cwd: `${options.targetDirectory}/${options.projectName}`,
         }),
       skip: () => !options.runInstall,
     },
