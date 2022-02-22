@@ -1,4 +1,4 @@
-NodeJS command line to generate JavaScript/TypeScript start template.
+NodeJS command line to generate JavaScript/TypeScript starter template.
 
 ## Preview
 ![CLI Preview](https://github.com/demarche1/create-express-template-cli/blob/master/assets/preview/20220221210153.gif)
